@@ -32,23 +32,19 @@ The system will be composed of the next components:
 
 ### Diagram
 Web UI 
-    |
-    V
+=> 
 Backend Service + CLI
-    |
-    V
-StorageManager -> DB Storage
-    |
-    V
-S3 Storage
-    ^
-    |
+=>
+StorageManager
+=>
+S3 Storage / DB Storage
+<=
 Async file queue
-    |
-    V
+=>
 Worker processing file
 
 ### Functional Requirements
+
 1. Upload CSV file
 * Accept file via API (or CLI)
 * Store the file in storage (S3)
@@ -66,8 +62,9 @@ Worker processing file
 4. Metadata
 * We should keep in the storage DB: file_id, upload time, processing duration (ms), proceesing status, the aggreagations and list of invalid rows
 
-## Data Model
-1. Data stored per file in the DB storage
+### Data Model
+
+Data stored per file in the DB storage
 ```
 {
     file_id: number,
@@ -90,8 +87,8 @@ Worker processing file
 }
 ```
 
-
 ### Error Handling
+
 1. API validations
     1. Missing file - API returns 400 Bad Request: Missing file
     2. Wrong file type - API returns 400 Bad Request: Invalid Parameter Type
@@ -100,6 +97,7 @@ Worker processing file
 4. Worker error - "failed" status in metadata
 
 ### Future thoughts
+
 1. Supporting caching using redis for results
 2. Authentication support
 3. UI improvments - pagination
