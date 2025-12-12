@@ -37,7 +37,7 @@ Backend Service + CLI
 =>
 StorageManager
 =>
-S3 Storage / DB Storage
+File Storage (S3 like) / MetaData Storage (DB like)
 <=
 Async file queue
 =>
@@ -47,8 +47,8 @@ Worker processing file
 
 1. Upload CSV file
 * Accept file via API (or CLI)
-* Store the file in storage (S3)
-* Create metadata entry in storage (DB)
+* Store the file in storage (S3 like)
+* Create metadata entry in metadata storage (DB like)
 * Send the file to queue for background processing
 * Returns the file id for tracking abilities
 
