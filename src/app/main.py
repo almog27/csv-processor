@@ -1,14 +1,13 @@
-from fastapi import FastAPI, UploadFile, HTTPException
+from contextlib import asynccontextmanager
 from uuid import uuid4
+
+from fastapi import FastAPI, UploadFile, HTTPException
 
 from app.models import FileUploadResponse, FileResultResponse
 from app.services.storage.storage_manager import StorageManager
 from app.services.storage.mock_s3 import MockS3
 from app.services.storage.mock_db import MockDB
 from app.services.queue_manager import init_queue, enqueue_file, start_workers
-
-
-app = FastAPI(title="CSV Processor")
 
 # Create Storage Manager instance with Mocked S3 as file storage,
 # and Mocked DB as the metadata storage
@@ -17,9 +16,13 @@ storage = StorageManager(file_storage=MockS3(), metadata_store=MockDB())
 init_queue(storage)
 
 
-@app.on_event("startup")
-async def startup_event():
+@asynccontextmanager
+async def lifespan(app: FastAPI):
     start_workers(3)
+    yield
+
+
+app = FastAPI(title="CSV Processor", lifespan=lifespan)
 
 
 @app.post("/upload", response_model=FileUploadResponse)
@@ -47,4 +50,4 @@ async def get_results(file_id: str):
     rec = await storage.get_file_record(file_id)
     if not rec:
         raise HTTPException(status_code=404, detail="File not found")
-    return FileResultResponse.parse_obj(rec)
+    return FileResultResponse.model_validate(rec)
