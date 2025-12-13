@@ -9,4 +9,5 @@ services:
       - ./src:/app/src
     environment:
       - PYTHONUNBUFFERED=1
-    command: uv run uvicorn src.app.main:app --host 0.0.0.0 --port 8000
+      - PYTHONPATH=/app/app
+    command: uv run uvicorn app.main:app --host 0.0.0.0 --port 2701

@@ -1,4 +1,4 @@
-.PHONY: prepare install run test lint fmt docker-build docker-up docker-test clean
+.PHONY: prepare install run test lint fmt docker-build docker-up docker-down docker-test clean
 
 VENV := .venv
 PY := $(VENV)/bin/python
@@ -16,7 +16,7 @@ install:
 	$(UV) add --dev pytest pytest-asyncio httpx ruff mypy || true
 
 run:
-	$(UV) run uvicorn src.app.main:app --reload --port 2701
+	PAYTHONPATH=src $(UV) run uvicorn app.main:app --reload --port 2701
 
 test:
 	$(UV) run pytest
@@ -33,8 +33,11 @@ docker-build:
 docker-up:
 	docker-compose up
 
+docker-down:
+	docker-compose down --rmi all -v
+
 docker-test:
-	docker-compose run sensor_service $(UV) run pytest
+	docker-compose run csv_processor uv run pytest
 
 clean:
 	rm -rf $(VENV)

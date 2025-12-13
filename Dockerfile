@@ -4,14 +4,15 @@ WORKDIR /app
 
 RUN apt-get update && apt-get install -y build-essential && rm -rf /var/lib/apt/lists/*
 
-RUN pip install --no-cache-dir poetry
+RUN pip install --no-cache-dir uv
 
-COPY pyproject.toml poetry.lock* /app/
+COPY pyproject.toml uv.lock* /app/
 COPY src /app/src
 
-RUN poetry config virtualenvs.create false \
- && poetry install --no-interaction --no-ansi
+RUN uv sync
+
+ENV PYTHONPATH=/app/src
 
 EXPOSE 2701
 
-CMD ["uv", "run", "uvicorn", "src.app.main:app", "--host", "0.0.0.0", "--port", "8000"]
+CMD ["uv", "run", "uvicorn", "app.main:app", "--host", "0.0.0.0", "--port", "2701"]
