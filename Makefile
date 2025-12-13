@@ -1,4 +1,4 @@
-.PHONY: prepare install run test lint fmt docker-build docker-up docker-down docker-test clean
+.PHONY: prepare install run test lint fmt docker-build docker-up docker-down docker-test clean cli-process
 
 VENV := .venv
 PY := $(VENV)/bin/python
@@ -41,3 +41,6 @@ docker-test:
 
 clean:
 	rm -rf $(VENV)
+
+cli-process:
+	${UV} run python -m src.app.cli process ${FILE_ID} ${FILE}
