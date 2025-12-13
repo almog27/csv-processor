@@ -5,9 +5,11 @@ from typing import Dict, List, Optional, Any
 class FileUploadResponse(BaseModel):
     file_id: str
 
+
 class ErrorEntry(BaseModel):
     row: int
     error: str
+
 
 class Aggregates(BaseModel):
     row_count: int

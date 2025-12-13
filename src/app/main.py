@@ -1,11 +1,12 @@
 from fastapi import FastAPI, UploadFile, HTTPException
 from uuid import uuid4
-import asyncio
+import time
 
 from src.app.models import FileUploadResponse, FileResultResponse
 from src.app.services.storage.storage_manager import StorageManager
 from src.app.services.storage.mock_s3 import MockS3
 from src.app.services.storage.mock_db import MockDB
+from src.app.services.processor import process_csv
 
 app = FastAPI(title="CSV Processor")
 
@@ -27,6 +28,15 @@ async def upload(file: UploadFile):
     file_id = str(uuid4())
 
     await storage.upload_file(file_id, content)
+
+    start = time.time()
+    aggregates, errors = await process_csv(content)
+    duration_ms = int((time.time() - start) * 1000)
+    status = "processed" if not errors else "partial"
+
+    await storage.update_file_record(
+        file_id, {"status": status, "aggregates": aggregates, "errors": errors, "duration_ms": duration_ms}
+    )
 
     return FileUploadResponse(file_id=file_id)
 
