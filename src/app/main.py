@@ -1,5 +1,6 @@
 from contextlib import asynccontextmanager
 from uuid import uuid4
+from fastapi.middleware.cors import CORSMiddleware
 
 from fastapi import FastAPI, UploadFile, HTTPException
 
@@ -23,6 +24,16 @@ async def lifespan(app: FastAPI):
 
 
 app = FastAPI(title="CSV Processor", lifespan=lifespan)
+
+origins = ["http://localhost:5173"]  # allow Vite dev server
+
+app.add_middleware(
+    CORSMiddleware,
+    allow_origins=origins,
+    allow_credentials=True,
+    allow_methods=["*"],
+    allow_headers=["*"],
+)
 
 
 @app.post("/upload", response_model=FileUploadResponse)

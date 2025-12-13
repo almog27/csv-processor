@@ -1,4 +1,4 @@
-.PHONY: prepare install run test lint fmt docker-build docker-up docker-down docker-test clean cli-process
+.PHONY: prepare install run test lint fmt docker-build docker-up docker-down docker-test clean cli-process ui-prep ui-run
 
 VENV := .venv
 PY := $(VENV)/bin/python
@@ -44,3 +44,9 @@ clean:
 
 cli-process:
 	${UV} run python -m src.app.cli process ${FILE_ID} ${FILE}
+
+ui-prep:
+	cd frontend && npm install && cd ..
+
+ui-run:
+	cd frontend && npm run dev
