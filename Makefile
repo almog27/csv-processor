@@ -46,7 +46,7 @@ cli-process:
 	${UV} run python -m src.app.cli process ${FILE_ID} ${FILE}
 
 ui-prep:
-	cd frontend && npm install && cd ..
+	cd frontend && npm install
 
 ui-run:
 	cd frontend && npm run dev
