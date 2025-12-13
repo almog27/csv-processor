@@ -1,18 +1,25 @@
 from fastapi import FastAPI, UploadFile, HTTPException
 from uuid import uuid4
-import time
 
 from app.models import FileUploadResponse, FileResultResponse
 from app.services.storage.storage_manager import StorageManager
 from app.services.storage.mock_s3 import MockS3
 from app.services.storage.mock_db import MockDB
-from app.services.processor import process_csv
+from app.services.queue_manager import init_queue, enqueue_file, start_workers
+
 
 app = FastAPI(title="CSV Processor")
 
 # Create Storage Manager instance with Mocked S3 as file storage,
 # and Mocked DB as the metadata storage
 storage = StorageManager(file_storage=MockS3(), metadata_store=MockDB())
+
+init_queue(storage)
+
+
+@app.on_event("startup")
+async def startup_event():
+    start_workers(3)
 
 
 @app.post("/upload", response_model=FileUploadResponse)
@@ -29,14 +36,8 @@ async def upload(file: UploadFile):
 
     await storage.upload_file(file_id, content)
 
-    start = time.time()
-    aggregates, errors = await process_csv(content)
-    duration_ms = int((time.time() - start) * 1000)
-    status = "processed" if not errors else "partial"
-
-    await storage.update_file_record(
-        file_id, {"status": status, "aggregates": aggregates, "errors": errors, "duration_ms": duration_ms}
-    )
+    # Instead of doing the calculation here - send it to queue - for scale support
+    await enqueue_file(file_id)
 
     return FileUploadResponse(file_id=file_id)
 
