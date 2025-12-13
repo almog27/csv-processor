@@ -1,0 +1,12 @@
+version: "3.9"
+services:
+  csv_processor:
+    build: .
+    container_name: csv_processor
+    ports:
+      - "2701:2701"
+    volumes:
+      - ./src:/app/src
+    environment:
+      - PYTHONUNBUFFERED=1
+    command: uv run uvicorn src.app.main:app --host 0.0.0.0 --port 8000
