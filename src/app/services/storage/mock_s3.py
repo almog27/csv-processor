@@ -1,7 +1,7 @@
 from typing import Dict, Optional
 import asyncio
 
-from src.app.services.storage.storage_interface import FileStorage
+from app.services.storage.storage_interface import FileStorage
 
 
 class MockS3(FileStorage):

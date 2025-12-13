@@ -2,11 +2,11 @@ from fastapi import FastAPI, UploadFile, HTTPException
 from uuid import uuid4
 import time
 
-from src.app.models import FileUploadResponse, FileResultResponse
-from src.app.services.storage.storage_manager import StorageManager
-from src.app.services.storage.mock_s3 import MockS3
-from src.app.services.storage.mock_db import MockDB
-from src.app.services.processor import process_csv
+from app.models import FileUploadResponse, FileResultResponse
+from app.services.storage.storage_manager import StorageManager
+from app.services.storage.mock_s3 import MockS3
+from app.services.storage.mock_db import MockDB
+from app.services.processor import process_csv
 
 app = FastAPI(title="CSV Processor")
 

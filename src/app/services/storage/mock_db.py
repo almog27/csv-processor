@@ -2,7 +2,7 @@ from typing import Dict, Optional, Any
 import asyncio
 import time
 
-from src.app.services.storage.storage_interface import MetadataStore
+from app.services.storage.storage_interface import MetadataStore
 
 
 class MockDB(MetadataStore):
