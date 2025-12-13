@@ -13,9 +13,9 @@ class ErrorEntry(BaseModel):
 
 class Aggregates(BaseModel):
     row_count: int
-    min_value: float
-    max_value: float
-    mean_value: float
+    min_value: Optional[float] = None
+    max_value: Optional[float] = None
+    mean_value: Optional[float] = None
     per_sensor_count: Dict[str, int]
 
 

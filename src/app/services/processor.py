@@ -19,12 +19,18 @@ async def process_csv(file_content: str) -> Tuple[Dict[str, Any], List[Dict[str,
 
     for rowIndex, row in enumerate(reader, start=1):
         try:
-            sensor_id = row["sensor_id"]
-            value_raw = row["value"]
+            sensor_id = row.get("sensor_id")
+            value_raw = row.get("value")
             value = float(value_raw)
-        except KeyError as e:
-            errors.append({"row": rowIndex, "error": f"missing column {e}"})
-            continue
+
+            # Validate missing and empty vallues
+            if not sensor_id or not value_raw:
+                missing = []
+                if not sensor_id:
+                    missing.append("sensor_id")
+                if not value_raw:
+                    missing.append("value")
+                errors.append({"row": rowIndex, "error": f"missing column(s) {', '.join(missing)}"})
         except ValueError:
             errors.append({"row": rowIndex, "error": f"invalid float: {row.get('value')}"})
             continue

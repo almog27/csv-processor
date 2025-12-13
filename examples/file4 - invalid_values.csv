@@ -1,0 +1,6 @@
+sensor_id,timestamp,value
+sensor-A,2025-10-01T08:12:03Z,23.5
+sensor-B,2025-10-01T08:12:07Z,not_a_number
+sensor-C,2025-10-01T08:13:10Z,15.0
+sensor-D,2025-10-01T09:00:00Z,N/A
+sensor-E,2025-10-01T09:05:01Z,42.0
