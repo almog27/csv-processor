@@ -3,11 +3,11 @@ from pathlib import Path
 import typer
 from uuid import uuid4
 
-from src.app.services.storage.storage_manager import StorageManager
-from src.app.services.storage.mock_s3 import MockS3
-from src.app.services.storage.mock_db import MockDB
-from src.app.services.queue_manager import enqueue_file
-from src.app.services.processor import process_csv
+from app.services.storage.storage_manager import StorageManager
+from app.services.storage.mock_s3 import MockS3
+from app.services.storage.mock_db import MockDB
+from app.services.queue_manager import enqueue_file
+from app.services.processor import process_csv
 
 app = typer.Typer()
 storage = StorageManager(file_storage=MockS3(), metadata_store=MockDB())
