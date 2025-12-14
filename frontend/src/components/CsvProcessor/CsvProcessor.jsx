@@ -24,7 +24,6 @@ export default function CsvProcessor() {
 
     const data = await res.json();
     setFileId(data.file_id);
-    console.log(`Almog - here, ${data.file_id}`)
     setLoading(false);
   }
 

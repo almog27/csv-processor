@@ -70,6 +70,7 @@ def results(file_id: str):
     """
     Print processing results for file_id.
     """
+
     async def _run():
         rec = await storage.get_file_record(file_id)
         if not rec:

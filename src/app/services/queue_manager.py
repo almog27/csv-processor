@@ -1,8 +1,11 @@
 import asyncio
+import logging
 import time
 from typing import Optional, Any
 
 from app.services.processor import process_csv
+
+logger = logging.getLogger(__name__)
 
 _storage: Optional[Any] = None
 
@@ -50,9 +53,9 @@ async def worker():
         file_id = await _file_queue.get()
         try:
             await _process_and_store(file_id)
-            print(f"[worker] processed {file_id}")
+            logger.info(f"Processed file {file_id}")
         except Exception as e:
-            print(f"[worker] error processing {file_id}: {e}")
+            logger.error(f"Error processing {file_id}: {e}")
             if _storage:
                 await _storage.update_file_record(file_id, {"status": "failed", "errors": [str(e)], "duration_ms": 0})
         finally:

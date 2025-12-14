@@ -1,3 +1,4 @@
+import logging
 from contextlib import asynccontextmanager
 from uuid import uuid4
 from fastapi.middleware.cors import CORSMiddleware
@@ -9,6 +10,12 @@ from app.services.storage.storage_manager import StorageManager
 from app.services.storage.mock_s3 import MockS3
 from app.services.storage.mock_db import MockDB
 from app.services.queue_manager import init_queue, enqueue_file, start_workers
+
+logging.basicConfig(
+    level=logging.INFO,
+    format="%(asctime)s - %(name)s - %(levelname)s - %(message)s",
+)
+logger = logging.getLogger(__name__)
 
 # Create Storage Manager instance with Mocked S3 as file storage,
 # and Mocked DB as the metadata storage
@@ -53,6 +60,7 @@ async def upload(file: UploadFile):
     # Instead of doing the calculation here - send it to queue - for scale support
     await enqueue_file(file_id)
 
+    logger.info(f"Uploaded file {file.filename} with id {file_id}")
     return FileUploadResponse(file_id=file_id)
 
 
