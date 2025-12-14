@@ -1,11 +1,11 @@
 # CSV Processor
 
-My CSV processir is a service that using FastAPI with async queue workers.
-It also has a CLI support and a UI layer that use the FastAPI layer.
-It processes sensors data from CSV files and coputes aggregates metadata.
+A CSV processor service using FastAPI with async queue workers.
+It also has CLI support and a UI layer that uses the FastAPI layer.
+It processes sensor data from CSV files and computes aggregate metadata.
 
 ## Features
-**REST API** - Upload CSV file and retrives processing results
+**REST API** - Upload CSV file and retrieve processing results
 **Async queue** - Processing the aggregation calculations in a queue for scale future support - not waiting for the whole calculations to end
 **CLI** - Command line interface support
 **Docker support** - Including containerized deployment
@@ -40,12 +40,13 @@ make run
 
 **Swagger**: http://localhost:2701/docs
 
+
 **ReDoct**: http://localhost:2701/redoc
 
 **CURL commands**
 ```bash
 # Upload a CSV file
-curl -X POST -F "file=@example/file1.csv" http://localhost:2701/upload
+curl -X POST -F "file=@examples/file1.csv" http://localhost:2701/upload
 
 # Show Results
 curl http://localhost:2701/results/(file_id)
